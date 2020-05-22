@@ -1,0 +1,32 @@
+#--------------------------------------------------
+# This is a sample microservice configuration file.
+# Changes saved are actively detected, causing a new 
+# microservice using the new settings to be started 
+# and the old one stopped.
+#--------------------------------------------------
+
+
+# Instruct the runner on whether to have this microservice loaded and running.
+
+enable=true
+
+
+# Noqms properties for every microservice. Documented in com.noqms.Starter.java.
+# com.noqms.MicroService (the parent class of real microservices) is a harmless stand-in for this runnable sample config.
+
+noqms.groupName=SampleGroup
+noqms.serviceName=SampleMicroService
+noqms.servicePath=com.noqms.MicroService
+noqms.threads=10
+noqms.typicalMillis=100
+noqms.timeoutMillis=1000
+noqms.maxMessageOutBytes=100
+noqms.maxMessageInBytes=100
+
+
+# Properties specific to and fitting for your microservice. For example:
+
+mymicroservice.dal.url=jdbc:postgresql://localhost/mydb
+mymicroservice.enhancement.1.enable=true
+mymicroservice.default.http.timeout.millis=1000;
+mymicroservice.algos.use.fft=true

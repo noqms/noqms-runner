@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  	<appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../log/service.log</file>	
+	    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+	      <fileNamePattern>service.%i.log</fileNamePattern>
+	      <minIndex>1</minIndex>
+	      <maxIndex>9</maxIndex>
+	    </rollingPolicy>
+	    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+	      <maxFileSize>10MB</maxFileSize>
+	    </triggeringPolicy>
+	    <encoder>
+		  <pattern>%d{ISO8601} %level %logger{10}: %msg%n</pattern>
+	    </encoder>
+  	</appender>
+          
+  	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+	    <encoder>
+		  <pattern>%d{ISO8601} %level %logger{10}: %msg%n</pattern>
+	    </encoder>
+  	</appender>
+  	
+	<root level="info">
+    	<appender-ref ref="File" />
+    	<appender-ref ref="Console" />
+    </root>  	
+</configuration>
