@@ -21,7 +21,7 @@ public class Runner {
         try {
             new Runner(Util.argsToProps(args)).run();
         } catch (Exception ex) {
-            logger.logError("Startup exception", ex);
+            logger.error("Startup exception", ex);
             Util.sleepMillis(100);
             System.exit(-1);
         }
@@ -40,12 +40,12 @@ public class Runner {
 
         String configPath = props.getProperty(PROP_MICRO_CONFIG_PATH);
         if (configPath == null)
-            throw new Exception("Argument microConfigPath is required");
+            throw new Exception("Argument noqms.microConfigPath is required");
         this.microConfigPath = Path.of(configPath);
     }
 
     public void run() throws Exception {
-        logger.logInfo("Started: " + props);
+        logger.info("Started: " + props);
 
         long lastFileCheckTimeMillis = 0;
         while (!exiting.get()) {
@@ -53,7 +53,7 @@ public class Runner {
                 Files.list(microConfigPath).filter(path -> path.toString().endsWith(".micro")).forEach(path -> {
                     processFile(path);
                 });
-                logger.logInfo("microsLoaded=" + microsByFilePath.size());
+                logger.info("microsLoaded=" + microsByFilePath.size());
                 lastFileCheckTimeMillis = System.currentTimeMillis();
             }
             Util.sleepMillis(1000);
@@ -67,21 +67,19 @@ public class Runner {
         String fileString = microFile.toString();
         Long fileTime = fileTimesByFilePath.get(fileString);
         if (fileTime == null || lastModified > fileTime) {
-            logger.logInfo("Reading " + fileString);
+            logger.info("Reading " + fileString);
             MicroService oldMicro = microsByFilePath.remove(fileString);
             if (oldMicro != null) {
                 oldMicro.drain(); // takes noqms.serviceUnavailableSeconds (default 5 seconds) to complete
-                oldMicro.stop();
+                oldMicro.destroy();
             }
-            MicroService micro = null;
             try {
-                micro = loadMicro(microFile); // takes noqms.emitterIntervalSeconds (default 2 seconds) to complete
+                MicroService micro = loadMicro(microFile); // takes noqms.emitterIntervalSeconds (default 2 seconds) to complete
                 fileTimesByFilePath.put(fileString, lastModified);
-            } catch (Exception ex) {
-                logger.logError("Failed loading the microservice in " + fileString, null);
-            }
-            if (micro != null)
                 microsByFilePath.put(fileString, micro);
+            } catch (Exception ex) {
+                logger.error("Failed loading the microservice in " + fileString, null);
+            }
         }
     }
 
@@ -99,7 +97,7 @@ public class Runner {
             try {
                 System.err.println("Uncaught exception: " + th.getMessage());
                 th.printStackTrace();
-                logger.logError("Uncaught exception", th);
+                logger.error("Uncaught exception", th);
             } catch (Throwable th2) {
             }
             exiting.set(true);
@@ -109,10 +107,10 @@ public class Runner {
     private class ShutdownHook extends Thread {
         @Override
         public void run() {
-            logger.logInfo("Stopping");
+            logger.info("Stopping");
             microsByFilePath.values().forEach(MicroService::drain);
-            microsByFilePath.values().forEach(MicroService::stop);
-            logger.logInfo("Stopped");
+            microsByFilePath.values().forEach(MicroService::destroy);
+            logger.info("Stopped");
             Util.sleepMillis(100);
         }
     }

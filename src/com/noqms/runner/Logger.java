@@ -14,19 +14,19 @@ public class Logger extends Thread implements LogListener {
         start();
     }
 
-    public void logDebug(String text) {
+    public void debug(String text) {
         addEntry(Level.DEBUG, text, null);
     }
 
-    public void logInfo(String text) {
+    public void info(String text) {
         addEntry(Level.INFO, text, null);
     }
 
-    public void logWarn(String text) {
+    public void warn(String text) {
         addEntry(Level.WARN, text, null);
     }
 
-    public void logError(String text, Throwable cause) {
+    public void error(String text, Throwable cause) {
         addEntry(Level.ERROR, text, cause);
     }
 
