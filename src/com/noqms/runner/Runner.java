@@ -8,13 +8,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.noqms.MicroService;
 
 public class Runner {
     public static final String PROP_MICRO_CONFIG_PATH = "noqms.microConfigPath";
 
-    private static final int FILE_CHECK_INTERVAL_MILLIS = 10000;
+    private static final int FILE_CHECK_INTERVAL_MILLIS = 60000;
     private static final Logger logger = new Logger("Runner");
 
     public static void main(String[] args) {
@@ -51,9 +52,8 @@ public class Runner {
         while (!exiting.get()) {
             if (System.currentTimeMillis() - lastFileCheckTimeMillis > FILE_CHECK_INTERVAL_MILLIS) {
                 Files.list(microConfigPath).filter(path -> path.toString().endsWith(".micro")).forEach(path -> {
-                    processFile(path);
+                    new Thread(() -> processFile(path)).start();
                 });
-                logger.info("microsLoaded=" + microsByFilePath.size());
                 lastFileCheckTimeMillis = System.currentTimeMillis();
             }
             Util.sleepMillis(1000);
@@ -70,8 +70,16 @@ public class Runner {
             logger.info("Reading " + fileString);
             MicroService oldMicro = microsByFilePath.remove(fileString);
             if (oldMicro != null) {
-                oldMicro.drain(); // takes noqms.serviceUnavailableSeconds (default 5 seconds) to complete
-                oldMicro.destroy();
+                try {
+                    oldMicro.drain();
+                } catch (Throwable th) {
+                    logger.error("Drain exception", th);
+                }
+                try {
+                    oldMicro.destroy();
+                } catch (Throwable th) {
+                    logger.error("Destroy exception", th);
+                }
             }
             try {
                 MicroService micro = loadMicro(microFile); // takes noqms.emitterIntervalSeconds (default 2 seconds) to complete
@@ -108,10 +116,23 @@ public class Runner {
         @Override
         public void run() {
             logger.info("Stopping");
-            microsByFilePath.values().forEach(MicroService::drain);
-            microsByFilePath.values().forEach(MicroService::destroy);
+            AtomicInteger threadCount = new AtomicInteger(microsByFilePath.size());
+            microsByFilePath.values().forEach(microService -> new Thread(() -> {
+                try {
+                    microService.drain();
+                } catch (Throwable th) {
+                    logger.error("Drain exception", th);
+                }
+                try {
+                    microService.destroy();
+                } catch (Throwable th) {
+                    logger.error("Destroy exception", th);
+                }
+                threadCount.decrementAndGet();
+            }).start());
+            while (threadCount.get() > 0)
+                Util.sleepMillis(1000);
             logger.info("Stopped");
-            Util.sleepMillis(100);
         }
     }
 }

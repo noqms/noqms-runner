@@ -18,7 +18,6 @@ noqms.groupName=SampleGroup
 noqms.serviceName=SampleMicroService
 noqms.servicePath=com.noqms.MicroService
 noqms.threads=10
-noqms.typicalMillis=100
 noqms.timeoutMillis=1000
 noqms.maxMessageOutBytes=100
 noqms.maxMessageInBytes=100
