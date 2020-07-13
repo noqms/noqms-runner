@@ -27,4 +27,16 @@ public class Util {
             sleptMillis += System.currentTimeMillis() - millisStart;
         }
     }
+    
+    public static long getMemoryUsedMB() {
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        return (totalMemory - freeMemory) / (1024 * 1024);
+    }
+
+    public static int getMemoryUsedPercent() {
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        return 100 - (int)(100.0F * freeMemory / totalMemory);
+    }
 }

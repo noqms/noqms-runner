@@ -51,6 +51,7 @@ public class Runner {
         long lastFileCheckTimeMillis = 0;
         while (!exiting.get()) {
             if (System.currentTimeMillis() - lastFileCheckTimeMillis > FILE_CHECK_INTERVAL_MILLIS) {
+                logger.info("Stats: memoryUsedMB=" + Util.getMemoryUsedMB() + " memoryUsed%=" + Util.getMemoryUsedPercent() + " micros=" + microsByFilePath.size());
                 Files.list(microConfigPath).filter(path -> path.toString().endsWith(".micro")).forEach(path -> {
                     new Thread(() -> processFile(path)).start();
                 });
