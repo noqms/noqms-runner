@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   	<appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>../log/service.log</file>	
+		<file>../log/server.log</file>	
 	    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-	      <fileNamePattern>../log/service.%i.log</fileNamePattern>
+	      <fileNamePattern>../log/server.%i.log</fileNamePattern>
 	      <minIndex>1</minIndex>
 	      <maxIndex>9</maxIndex>
 	    </rollingPolicy>
