@@ -3,7 +3,7 @@
   	<appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>../log/service.log</file>	
 	    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-	      <fileNamePattern>service.%i.log</fileNamePattern>
+	      <fileNamePattern>../log/service.%i.log</fileNamePattern>
 	      <minIndex>1</minIndex>
 	      <maxIndex>9</maxIndex>
 	    </rollingPolicy>
