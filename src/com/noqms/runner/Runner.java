@@ -25,6 +25,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import com.noqms.MicroService;
 
@@ -68,9 +69,11 @@ public class Runner {
         while (!exiting.get()) {
             if (System.currentTimeMillis() - lastFileCheckTimeMillis > FILE_CHECK_INTERVAL_MILLIS) {
                 logger.info("Stats: memoryUsedMB=" + Util.getMemoryUsedMB() + " memoryUsed%=" + Util.getMemoryUsedPercent() + " micros=" + microsByFilePath.size());
-                Files.list(microConfigPath).filter(path -> path.toString().endsWith(".micro")).forEach(path -> {
+                Stream<Path> files = Files.list(microConfigPath);
+                files.filter(path -> path.toString().endsWith(".micro")).forEach(path -> {
                     new Thread(() -> processFile(path)).start();
                 });
+                files.close();
                 lastFileCheckTimeMillis = System.currentTimeMillis();
             }
             Util.sleepMillis(1000);
