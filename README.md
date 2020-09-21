@@ -1,4 +1,4 @@
-## NoQMS Runner - Dynamic Microservice Runner/Loader
+## NoQMS Runner - Dynamic Microservice Loader/Runner
 
 NoQMS runner is the main() around your microservices with logging integration and dynamic
 microservice lifecycle management based on individual microservice configuration files.
