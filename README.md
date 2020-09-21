@@ -28,7 +28,7 @@ To run NoQMS microservices using the runner found in this project:
 * Put the jars and dependencies together into a directory.
 * Put your own microservice jars in a directory.
 * Place your \*.micro microservice definition files into a config directory along with
-	a logback.xml containing your desired logging parameters. An example logback.xml i
+	a logback.xml containing your desired logging parameters. An example logback.xml is
 	included in this project.
 * cd to the directory containing the noqms, noqms-runner, and dependency jars.
 * Execute: java -server -cp \*:(path to your microservice jars):(path to your \*.micro config files) com.noqms.runner.Runner noqms.microConfigPath=(path to your \*.micro config files)
