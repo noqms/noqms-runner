@@ -11,20 +11,7 @@ unloads a given microservice whenever changes are made to its definition file.
 Create a configuration file for each of your microservices. Withing this file are the key value
 pairs (property file format) specific to any noqms microservice as well as your own optional application properties. 
 An additional enable=true/false directive tells the NoQMS Runner whether
-to load or unload the microservice.
- 
-An example "login.micro" file:
->enable=true
->
->noqms.groupName=MyApp  
->noqms.serviceName=Login  
->noqms.servicePath=com.mycompany.micro.Login  
->noqms.threads=1  
->noqms.timeoutMillis=4000  
->noqms.maxMessageOutBytes=10000  
->noqms.maxMessageInBytes=1000  
->  
->myapp.myKey=true (etc)
+to load or unload the microservice. An example configuration file is included in this project.
  
 ## Running
 
@@ -40,8 +27,9 @@ To run NoQMS microservices using the runner found in this project:
 * Download this noqms-runner project and compile the noqms-runner jar.
 * Put the jars and dependencies together into a directory.
 * Put your own microservice jars in a directory.
-* Place your *.micro microservice definition files into a config directory along with
-	a logback.xml containing your desired logging parameters.
+* Place your \*.micro microservice definition files into a config directory along with
+	a logback.xml containing your desired logging parameters. An example logback.xml i
+	included in this project.
 * cd to the directory containing the noqms, noqms-runner, and dependency jars.
 * Execute: java -server -cp \*:(path to your microservice jars):(path to your \*.micro config files) com.noqms.runner.Runner noqms.microConfigPath=(path to your \*.micro config files)
 
