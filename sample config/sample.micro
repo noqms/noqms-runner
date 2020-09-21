@@ -12,11 +12,11 @@ enable=true
 
 
 # Noqms properties for every microservice. Documented in com.noqms.Starter.java.
-# com.noqms.MicroService (the parent class of real microservices) is a harmless stand-in for this runnable sample config.
+# com.noqms.MicroService (the parent class of real microservices) can be a harmless runnable noqms.servicePath for testing.
 
-noqms.groupName=SampleGroup
-noqms.serviceName=SampleMicroService
-noqms.servicePath=com.noqms.MicroService
+noqms.groupName=MyMicroServiceGroup
+noqms.serviceName=MyMicroServiceName
+noqms.servicePath=com.mycompany.MyMicroService
 noqms.threads=10
 noqms.timeoutMillis=1000
 noqms.maxMessageOutBytes=100
