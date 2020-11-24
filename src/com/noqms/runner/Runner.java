@@ -104,7 +104,8 @@ public class Runner {
             try {
                 MicroService micro = loadMicro(microFile); // takes noqms.emitterIntervalSeconds (default 2 seconds) to complete
                 fileTimesByFilePath.put(fileString, lastModified);
-                microsByFilePath.put(fileString, micro);
+                if (micro != null)
+                    microsByFilePath.put(fileString, micro);
             } catch (Exception ex) {
                 logger.error("Failed loading the microservice in " + fileString, null);
             }
