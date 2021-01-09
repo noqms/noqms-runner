@@ -3,8 +3,7 @@
 NoQMS runner is the main() around your microservices with logging integration and dynamic
 microservice lifecycle management based on individual microservice configuration files.
 Place your microservice configuration files (with a suffix of .micro) in the path defined by the noqms.microConfigPath command line variable.
-The NoQMS runner then monitors the microservice definitions there and dynamically loads (with new properties if changed) or
-unloads a given microservice whenever changes are made to its definition file.
+The NoQMS runner then monitors the microservice definitions there and dynamically loads and unloads microservices with any new properties.
 
 ## Configuration Files
 
